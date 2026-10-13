@@ -3,6 +3,7 @@ import type { Control, FieldPath, FieldValues } from "react-hook-form";
 import { Controller } from "react-hook-form";
 import { Field, FieldDescription, FieldError, FieldLabel } from "./ui/field";
 import { Input } from "./ui/input";
+import { useId } from "react";
 
 type InputFieldProps<T extends FieldValues> = {
   name: FieldPath<T>;
@@ -26,6 +27,9 @@ export default function InputField<T extends FieldValues>({
   description,
   ...props
 }: InputFieldProps<T>) {
+  const generatedId = useId();
+  const errorId = `${generatedId}-error`;
+
   return (
     <Controller
       name={name}
@@ -42,6 +46,7 @@ export default function InputField<T extends FieldValues>({
               {...field}
               id={field.name}
               aria-invalid={fieldState.invalid}
+              aria-describedby={fieldState.invalid ? errorId : undefined}
               placeholder={placeholder || label}
               type={type}
               className={cn("h-10 rounded-md w-full ", className)}
@@ -51,7 +56,9 @@ export default function InputField<T extends FieldValues>({
 
           <FieldDescription>{description}</FieldDescription>
 
-          {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+          {fieldState.invalid && (
+            <FieldError id={errorId} errors={[fieldState.error]} />
+          )}
         </Field>
       )}
     />

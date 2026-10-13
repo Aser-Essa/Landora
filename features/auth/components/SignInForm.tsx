@@ -43,10 +43,28 @@ export default function SignInForm({ signIn, fetchStatus }: UseSignInProps) {
       return;
     }
 
-    toast.success("You have successfully logged in");
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    if (signIn.status === "complete") {
+      await signIn.finalize({
+        navigate: ({ session, decorateUrl }) => {
+          // Handle session tasks
+          if (session?.currentTask) {
+            console.log(session?.currentTask);
+            return;
+          }
 
-    router.push("/");
+          // If no session tasks, navigate the signed-in user to the home page
+          const url = decorateUrl("/");
+          if (url.startsWith("http")) {
+            window.location.href = url;
+          } else {
+            router.push(url);
+          }
+        },
+      });
+    } else {
+      console.error("Sign-in attempt not complete:", signIn);
+      toast.error("An error occurred while signing in");
+    }
   }
 
   return (

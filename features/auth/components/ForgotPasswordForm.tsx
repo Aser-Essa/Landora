@@ -1,22 +1,22 @@
 import { Button } from "@/components/ui/button";
 
+import { BackLink } from "@/components/BackLink";
 import InputField from "@/components/InputField";
 import { Field, FieldGroup, FieldSeparator } from "@/components/ui/field";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ChevronLeft, Loader2 } from "lucide-react";
-import Link from "next/link";
+import { Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { forgotPasswordSchema } from "../schemas";
 import { ForgotPasswordFormProps, ForgotPasswordFormType } from "../types";
 import GoogleAuthButton from "./GoogleAuthButton";
-import { BackLink } from "@/components/BackLink";
 
 export default function ForgotPasswordForm({
   fetchStatus,
   signIn,
   sendEmailCode,
-}: ForgotPasswordFormProps) {
+  setIsCodeSent,
+}: ForgotPasswordFormProps & { setIsCodeSent: (value: boolean) => void }) {
   const { handleSubmit, control } = useForm({
     resolver: zodResolver(forgotPasswordSchema),
     defaultValues: {
@@ -31,9 +31,11 @@ export default function ForgotPasswordForm({
 
     if (error) {
       toast.error(error.message);
+      return;
     }
 
-    await sendEmailCode();
+    const isSent = await sendEmailCode();
+    setIsCodeSent(isSent);
   }
 
   return (
@@ -61,7 +63,11 @@ export default function ForgotPasswordForm({
         />
 
         <Field>
-          <Button type="submit" className="h-12 text-md font-semibold">
+          <Button
+            type="submit"
+            className="h-12 text-md font-semibold"
+            disabled={fetchStatus === "fetching"}
+          >
             {fetchStatus === "fetching" ? (
               <p className="flex items-center gap-2">
                 Submitting...

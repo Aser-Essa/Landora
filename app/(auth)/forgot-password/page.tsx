@@ -3,10 +3,13 @@ import ForgotPasswordForm from "@/features/auth/components/ForgotPasswordForm";
 import ForgotPasswordVerifyCodeForm from "@/features/auth/components/ForgotPasswordVerifyCodeForm";
 import ResetPasswordForm from "@/features/auth/components/ResetPasswordForm";
 import { useSignIn } from "@clerk/nextjs";
+import { useState } from "react";
 import { toast } from "sonner";
 
 export default function Page() {
   const { signIn, fetchStatus } = useSignIn();
+
+  const [isCodeSent, setIsCodeSent] = useState(false);
 
   async function sendEmailCode() {
     const { error: sendCodeError } =
@@ -14,10 +17,14 @@ export default function Page() {
 
     if (sendCodeError) {
       toast.error(sendCodeError.message);
+      return false;
     }
+
+    toast.success("Verification code sent to your email");
+    return true;
   }
 
-  if (signIn.status === "needs_first_factor") {
+  if (signIn.status === "needs_first_factor" && isCodeSent) {
     return (
       <ForgotPasswordVerifyCodeForm
         sendEmailCode={sendEmailCode}
@@ -36,6 +43,7 @@ export default function Page() {
       fetchStatus={fetchStatus}
       signIn={signIn}
       sendEmailCode={sendEmailCode}
+      setIsCodeSent={setIsCodeSent}
     />
   );
 }

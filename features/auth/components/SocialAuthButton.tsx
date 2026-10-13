@@ -21,9 +21,9 @@ export function SocialAuthButton({
   const [loading, setLoading] = useState(false);
 
   const handleClick = async () => {
+    if (loading) return;
     await action.reset();
 
-    if (loading) return;
     setLoading(true);
     try {
       await action.sso({
@@ -43,6 +43,7 @@ export function SocialAuthButton({
       onClick={handleClick}
       disabled={loading}
       variant={"outline"}
+      type="button"
       className="h-12 flex items-center gap-2 text-md"
     >
       {children}

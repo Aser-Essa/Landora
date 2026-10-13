@@ -14,7 +14,6 @@ export default function ForgotPasswordVerifyCodeForm({
 
     if (error) {
       toast.error(error.message);
-      await sendEmailCode();
     }
   }
 

@@ -31,5 +31,5 @@ export interface UseSignInProps {
 export interface ForgotPasswordFormProps {
   fetchStatus: "idle" | "fetching";
   signIn: ReturnType<typeof useSignIn>["signIn"];
-  sendEmailCode: () => Promise<void>;
+  sendEmailCode: () => Promise<boolean>;
 }

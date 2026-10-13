@@ -3,16 +3,15 @@ import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
-import { ChevronLeft, Loader2 } from "lucide-react";
-import { toast } from "sonner";
-import { useSignIn } from "@clerk/nextjs";
-import { resetPasswordSchema } from "../schemas";
-import { useRouter } from "next/navigation";
-import { ResetPasswordFormType } from "../types";
-import Link from "next/link";
+import { BackLink } from "@/components/BackLink";
 import InputField from "@/components/InputField";
 import { Field, FieldGroup } from "@/components/ui/field";
-import { BackLink } from "@/components/BackLink";
+import { useSignIn } from "@clerk/nextjs";
+import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { resetPasswordSchema } from "../schemas";
+import { ResetPasswordFormType } from "../types";
 
 export default function ResetPasswordForm() {
   const { signIn, fetchStatus } = useSignIn();
@@ -37,9 +36,33 @@ export default function ResetPasswordForm() {
       return;
     }
 
-    toast.success("Password reset successfully");
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    router.push("/");
+    if (signIn.status === "complete") {
+      const { error } = await signIn.finalize({
+        navigate: async ({ session, decorateUrl }) => {
+          // Handle session tasks
+          if (session?.currentTask) {
+            console.log(session.currentTask);
+            return;
+          }
+
+          // If no session tasks, navigate the signed-in user to the home page
+          const url = decorateUrl("/");
+          if (url.startsWith("http")) {
+            window.location.href = url;
+          } else {
+            router.push(url);
+          }
+        },
+      });
+
+      if (error) {
+        toast.error(error.message);
+        return;
+      }
+    } else {
+      console.error("Sign-in attempt not complete:", signIn);
+      toast.error("Something went wrong, please try again");
+    }
   }
 
   return (
