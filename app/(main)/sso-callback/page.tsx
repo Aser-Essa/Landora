@@ -11,23 +11,25 @@ export default function Page() {
     <>
       <HandleSSOCallback
         navigateToApp={({ session, decorateUrl }) => {
-          // Handle session tasks
-          // See https://clerk.com/docs/guides/development/custom-flows/authentication/session-tasks
           if (session?.currentTask) {
-            console.log(session?.currentTask);
+            router.replace("/session-tasks");
             return;
           }
 
-          // If no session tasks, navigate the signed-in user to the home page
           const url = decorateUrl("/");
+
           if (url.startsWith("http")) {
             window.location.href = url;
           } else {
-            router.push(url);
+            router.replace(url);
           }
         }}
-        navigateToSignIn={() => router.push("/sign-in")}
-        navigateToSignUp={() => router.push("/sign-up")}
+        navigateToSignIn={() => {
+          router.replace("/sign-in");
+        }}
+        navigateToSignUp={() => {
+          router.replace("/sign-up/continue");
+        }}
       />
 
       <main className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-background px-6 font-sans text-foreground">

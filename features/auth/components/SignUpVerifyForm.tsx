@@ -24,7 +24,7 @@ export default function SignUpVerifyForm({
     if (signUp.status === "complete") {
       await signUp.finalize({
         navigate: ({ session, decorateUrl }) => {
-          if (session.currentTask) {
+          if (session?.currentTask) {
             toast.error("Sign up attempt not complete");
             return;
           }
@@ -51,6 +51,10 @@ export default function SignUpVerifyForm({
       handleVerify={handleVerify}
       sendEmailCode={signUp.verifications.sendEmailCode}
       fetchStatus={fetchStatus}
+      onBack={() => {
+        signUp.reset();
+        router.refresh();
+      }}
     />
   );
 }

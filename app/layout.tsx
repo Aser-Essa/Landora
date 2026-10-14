@@ -1,8 +1,9 @@
 import { cn } from "@/lib/utils";
+import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import { Zain } from "next/font/google";
 import "./globals.css";
-import { ClerkProvider } from "@clerk/nextjs";
+import { Toaster } from "sonner";
 
 const zainSans = Zain({
   variable: "--font-zain",
@@ -22,6 +23,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={cn("h-full", "antialiased ", zainSans.variable, "font-sans")}
     >
       <body className="dark min-h-full flex flex-col">
+        <Toaster position="top-center" />
         <ClerkProvider>{children}</ClerkProvider>
       </body>
     </html>

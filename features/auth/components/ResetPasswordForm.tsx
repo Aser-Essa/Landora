@@ -41,7 +41,7 @@ export default function ResetPasswordForm() {
         navigate: async ({ session, decorateUrl }) => {
           // Handle session tasks
           if (session?.currentTask) {
-            console.log(session.currentTask);
+            console.log(session?.currentTask);
             return;
           }
 

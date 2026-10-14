@@ -1,3 +1,4 @@
+import { GoogleOneTap } from "@clerk/nextjs";
 import Link from "next/link";
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -17,6 +18,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
 
         <div className="flex flex-1 items-center justify-center">
           <div className="w-full max-w-lg">{children}</div>
+          <GoogleOneTap />
         </div>
       </div>
       <div className="relative hidden bg-muted-foreground/15 lg:block">

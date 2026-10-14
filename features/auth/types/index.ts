@@ -33,3 +33,10 @@ export interface ForgotPasswordFormProps {
   signIn: ReturnType<typeof useSignIn>["signIn"];
   sendEmailCode: () => Promise<boolean>;
 }
+
+export interface SupabaseUserType {
+  clerk_user_id: string;
+  name: string | null;
+  email: string;
+  status: "active" | "banned" | "deleted";
+}

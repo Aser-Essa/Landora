@@ -1,24 +1,25 @@
 "use client";
 
-import { BackLink } from "@/components/BackLink";
 import InputField from "@/components/InputField";
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2 } from "lucide-react";
+import { ChevronLeft, Loader2 } from "lucide-react";
+import { usePathname } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { verifySchema } from "../schemas";
 import { VerifyFormValues } from "../types";
-import { usePathname } from "next/navigation";
 
 type Props = {
   handleVerify: (data: VerifyFormValues) => Promise<void>;
   sendEmailCode: () => void;
   fetchStatus: "idle" | "fetching";
+  onBack: () => void;
 };
 
 export default function VerifyForm({
   handleVerify,
   sendEmailCode,
+  onBack,
   fetchStatus,
 }: Props) {
   const { handleSubmit, control } = useForm<VerifyFormValues>({
@@ -33,11 +34,18 @@ export default function VerifyForm({
   return (
     <div>
       <div className="mb-8 space-y-4">
-        {pathname === "/sign-up" ? (
-          <BackLink href={"/sign-up"}>Back to signup</BackLink>
-        ) : (
-          <BackLink href={"/sign-in"}>Back to login</BackLink>
-        )}
+        <button
+          className="group mb-4 inline-flex w-fit items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-foreground"
+          onClick={onBack}
+        >
+          <ChevronLeft
+            size={16}
+            className="translate-y-[-1.5px] transition-transform group-hover:-translate-x-0.5"
+          />
+          <span>
+            {pathname === "/sign-up" ? "Back to signup" : "Back to login"}
+          </span>
+        </button>
 
         <h3 className="font-trade-gothic text-[32px] leading-none font-bold">
           Verify code

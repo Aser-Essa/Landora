@@ -100,10 +100,6 @@ export function SignUpForm({ signUp }: UseSignUpProps) {
         />
 
         <Field className=" gap-0">
-          <div>
-            <GoogleOneTap />
-            <div id="clerk-captcha" />
-          </div>
           <Button type="submit" className={"h-12 text-md font-semibold"}>
             Create Account
           </Button>

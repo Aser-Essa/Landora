@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { useSignIn, useSignUp } from "@clerk/nextjs";
 import { useState } from "react";
+import { toast } from "sonner";
 
 type SocialSignUpProps = {
   strategy: "oauth_google";
@@ -28,7 +29,7 @@ export function SocialAuthButton({
     try {
       await action.sso({
         strategy,
-        redirectUrl: "/sso-callback",
+        redirectUrl: "/",
         redirectCallbackUrl: "/sso-callback",
       });
     } catch (err) {

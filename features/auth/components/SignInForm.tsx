@@ -108,10 +108,7 @@ export default function SignInForm({ signIn, fetchStatus }: UseSignInProps) {
         </div>
 
         <Field className=" gap-0">
-          <div>
-            <GoogleOneTap />
-            <div id="clerk-captcha" />
-          </div>
+          <div>{/*  */}</div>
           <Button type="submit" className="h-12 text-md font-semibold">
             {fetchStatus === "fetching" ? (
               <p className="flex items-center gap-2">
